@@ -262,7 +262,7 @@ def save_config(args: argparse.Namespace):
     config = {}
     for key, item in args._get_kwargs():
         if key != 'mapping_type':
-            print('Savinf config. Key: {} = {}'.format(key, item))
+            print('Saving config. Key: {} = {}'.format(key, item))
             config[key] = item
     out_path = os.path.join(args.out_dir, f"{args.prefix}.json")
     with open(out_path, 'w') as outfile:
@@ -310,7 +310,7 @@ def train(dataset: ClipCocoDataset, model: ClipCaptionModel, args,
         print(f">>> Training epoch {epoch}")
         sys.stdout.flush()
         progress = tqdm(total=len(train_dataloader), desc=output_prefix)
-        for idx, (tokens, mask, prefix, _) in enumerate(train_dataloader):
+        for idx, (tokens, mask, prefix) in enumerate(train_dataloader):
             model.zero_grad()
             tokens, mask, prefix = tokens.to(device), mask.to(device), prefix.to(device, dtype=torch.float32)
             outputs = model(tokens, prefix, mask)
