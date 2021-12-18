@@ -248,7 +248,7 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 #  Load model weights
 
 prefix_length = 40
-model = ClipCaptionPrefix(prefix_length, clip_length=40, prefix_size=512,
+model = ClipCaptionPrefix(prefix_length, clip_length=40, prefix_size=640,
 								  num_layers=8, mapping_type='transformer')
 model.load_state_dict(torch.load(model_path, map_location=CPU)) 
 
