@@ -242,13 +242,13 @@ is_gpu = True #@param {type:"boolean"}
 use_beam_search = True
 
 device = CUDA(0) if is_gpu else "cpu"
-clip_model, preprocess = clip.load("RN50x4", device=device, jit=False)
+clip_model, preprocess = clip.load("ViT-B/32", device=device, jit=False)
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 #  Load model weights
 
 prefix_length = 40
-model = ClipCaptionPrefix(prefix_length, clip_length=40, prefix_size=640,
+model = ClipCaptionPrefix(prefix_length, clip_length=40, prefix_size=512,
 								  num_layers=8, mapping_type='transformer')
 model.load_state_dict(torch.load(model_path, map_location=CPU)) 
 
