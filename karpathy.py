@@ -248,7 +248,7 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 #  Load model weights
 
 prefix_length = 40
-model = ClipCaptionPrefix(prefix_length, clip_length=40, prefix_size=640,
+model = ClipCaptionPrefix(prefix_length, clip_length=40, prefix_size=512,
 								  num_layers=8, mapping_type='transformer')
 model.load_state_dict(torch.load(model_path, map_location=CPU)) 
 
@@ -276,7 +276,7 @@ if not os.path.isfile(system_caption_file):
 		image = preprocess(pil_image).unsqueeze(0).to(device)
 		with torch.no_grad():
 			prefix = clip_model.encode_image(image).to(device, dtype=torch.float32)
-			prefix = prefix / prefix.norm(2, -1).item()
+			#prefix = prefix / prefix.norm(2, -1).item()
 			prefix_embed = model.clip_project(prefix).reshape(1, prefix_length, -1)
 		if use_beam_search:
 			text_caption = generate_beam(model, tokenizer, embed=prefix_embed)[0]
