@@ -304,6 +304,6 @@ df_scores = pd.DataFrame({'bleu_1': [BLEU_1], 'bleu_2': [BLEU_2],
 						  'BLEU_comb' : [BLEU_comb], 'METEOR' : [METEOR],
 						  'ROUGE_L' : [ROUGE_L] })
 
-df_scores.to_csv('scores_karpathy_test_predictions_{}_{}.csv'.format(CNN_TOP_MODEL, EMBED_DIM))
+df_scores.to_csv('scores_karpathy_test_predictions.csv')
 
 print('[INFO] Scores. Bleu 1 = {:.4} Bleu 2 = {:.4} Bleu 3 = {:.4} Bleu 4 = {:.4} Bleu_comb = {:.4} METEOR = {:.4} ROUGE_L = {:.4}'.format(BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L))
