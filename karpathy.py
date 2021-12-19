@@ -67,7 +67,7 @@ os.makedirs(save_path, exist_ok=True)
 model_path = '/home/jagargi2/CLIP_prefix_caption/coco_train/coco_prefix_latest.pt'
 
 
-def generate_beam(model, tokenizer, beam_size: int = 5, prompt=None, embed=None,
+def generate_beam(model, tokenizer, beam_size: int = 20, prompt=None, embed=None,
 				  entry_length=67, temperature=1., stop_token: str = '.'):
 
 	model.eval()
@@ -256,7 +256,6 @@ def best_n_sim_clip(text_captions, image_features, clip_model):
 		tokens = clip.tokenize([caption]).to(device).long()
 		text_features = clip_model.encode_text(tokens).detach()
 		sim = torch.cosine_similarity(text_features, image_features).cpu().numpy()[0]
-		print(sim)
 		if sim > best_sim:
 			best = caption
 			best_sim = sim
@@ -306,7 +305,7 @@ if not os.path.isfile(system_caption_file):
 			if max_sim_clip:
 				text_captions = generate_beam(model, tokenizer, embed=prefix_embed)
 				text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model)
-				print("PREDICT CAPTION: %s COSINE SIMILARITY: %s HYPOTHESIS: %s " %(text_caption, clip_sim, hypothesis))
+				print("PREDICT CAPTION: %s COSINE SIMILARITY: %s HYPOTHESIS: %s BEAM SIZE: 20 " %(text_caption, clip_sim, hypothesis))
 			else:
 				text_caption = generate_beam(model, tokenizer, embed=prefix_embed)[0]
 				print("PREDICT CAPTION: %s" %(text_caption))
