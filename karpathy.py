@@ -255,7 +255,7 @@ def best_n_sim_clip(text_captions, image_features, clip_model):
 	for i, caption in enumerate(text_captions):
 		tokens = clip.tokenize([caption]).to(device).long()
 		text_features = clip_model.encode_text(tokens).detach()
-		sim = torch.cosine_similarity(text_features, image_features)[0]
+		sim = torch.cosine_similarity(text_features, image_features).numpy()[0]
 		print(sim)
 		if sim > best_sim:
 			best = caption
