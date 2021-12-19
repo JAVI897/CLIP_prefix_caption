@@ -250,14 +250,18 @@ def compute_metrics(df_results):
 
 def best_n_sim_clip(text_captions, image_features, clip_model):
 	best = None
-	best_sim = 0 
-	for caption in text_captions:
+	hypothesis = None
+	best_sim = -1000000 
+	for i, caption in enumerate(text_captions):
 		tokens = clip.tokenize([caption]).to(device).long()
 		text_features = clip_model.encode_text(tokens).detach()
 		sim = torch.cosine_similarity(text_features, image_features)
+		print(sim)
 		if sim > best_sim:
 			best = caption
-	return best, best_sim
+			best_sim = sim
+			hypothesis = i
+	return best, best_sim, hypothesis
 
 is_gpu = True #@param {type:"boolean"}  
 use_beam_search = True
@@ -301,14 +305,16 @@ if not os.path.isfile(system_caption_file):
 		if use_beam_search:
 			if max_sim_clip:
 				text_captions = generate_beam(model, tokenizer, embed=prefix_embed)
-				text_caption, clip_sim = best_n_sim_clip(text_captions, prefix, clip_model)
+				text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model)
+				print("PREDICT CAPTION: %s COSINE SIMILARITY: %s HYPOTHESIS: %s " %(text_caption, clip_sim, hypothesis))
 			else:
 				text_caption = generate_beam(model, tokenizer, embed=prefix_embed)[0]
+				print("PREDICT CAPTION: %s" %(text_caption))
 
 		else:
 			text_caption = generate2(model, tokenizer, embed=prefix_embed)
+			print("PREDICT CAPTION: %s" %(text_caption))
 
-		print("PREDICT CAPTION: %s COSINE SIMILARITY: %s" %(text_caption))
 		caption_img.append(text_caption)
 
 		captions.append(caption_img)
