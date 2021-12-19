@@ -251,7 +251,7 @@ def compute_metrics(df_results):
 def best_n_sim_clip(text_captions, image_features, clip_model):
 	best = None
 	best_sim = 0 
-	image_features.size()
+	print(image_features.size())
 	for caption in text_captions:
 		tokens = clip.tokenize([caption]).to(device, dtype=torch.float32)
 		text_features = clip_model.encode_text(tokens).detach()
