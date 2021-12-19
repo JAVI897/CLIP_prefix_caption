@@ -19,6 +19,16 @@ from nltk import word_tokenize
 import nltk
 from rouge_score import rouge_scorer
 from train import ClipCaptionPrefix
+# saving names
+system_caption_file = 'system_caption_file_max_sim_clip.json'
+system_predictions_df = 'karpathy_test_predictions_max_sim_clip.csv'
+system_scores_df = 'scores_karpathy_test_predictions_max_sim_clip.csv'
+max_sim_clip = True
+## saving names when no max_sim_clip is done
+#system_caption_file = 'system_caption_file.json'
+#system_predictions_df = 'karpathy_test_predictions.csv'
+#system_scores_df = 'scores_karpathy_test_predictions.csv'
+#max_sim_clip = False
 
 nltk.download('punkt')
 nltk.download('wordnet')
@@ -238,6 +248,17 @@ def compute_metrics(df_results):
 	ROUGE_L = ROUGE_L/N
 	return BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L
 
+def best_n_sim_clip(text_captions, image_features, clip_model):
+	best = None
+	best_sim = 0 
+	for caption in text_captions:
+		tokens = clip.tokenize([caption]).to(device, dtype=torch.float32)
+		text_features = clip_model.encode_text(tokens).detach()
+		sim = torch.cosine_similarity(text_features, image_features)
+		if sim > best_sim:
+			best = caption
+	return best, best_sim
+
 is_gpu = True #@param {type:"boolean"}  
 use_beam_search = True
 
@@ -256,7 +277,6 @@ model = model.eval()
 device = CUDA(0) if is_gpu else "cpu"
 model = model.to(device)
 
-system_caption_file = 'system_caption_file.json'
 #Get ground truth captions validation
 with open('data/coco/karpathy_validation_captions.json') as json_file:
 	captions_valid_test = json.load(json_file)
@@ -279,18 +299,23 @@ if not os.path.isfile(system_caption_file):
 			#prefix = prefix / prefix.norm(2, -1).item()
 			prefix_embed = model.clip_project(prefix).reshape(1, prefix_length, -1)
 		if use_beam_search:
-			text_caption = generate_beam(model, tokenizer, embed=prefix_embed)[0]
+			if max_sim_clip:
+				text_captions = generate_beam(model, tokenizer, embed=prefix_embed)
+				text_caption, clip_sim = best_n_sim_clip(text_captions, prefix, clip_model)
+			else:
+				text_caption = generate_beam(model, tokenizer, embed=prefix_embed)[0]
+
 		else:
 			text_caption = generate2(model, tokenizer, embed=prefix_embed)
 
-		print("PREDICT CAPTION : %s" %(text_caption))
+		print("PREDICT CAPTION: %s COSINE SIMILARITY: %s" %(text_caption))
 		caption_img.append(text_caption)
 
 		captions.append(caption_img)
 		predictions.append([number_instance, caption_img])
 
 	df = pd.DataFrame(captions, columns = ['caption 1', 'caption 2', 'caption 3', 'caption 4', 'caption 5', 'prediction'])
-	df.to_csv('karpathy_test_predictions.csv')
+	df.to_csv(system_predictions_df)
 
 	coco_res_df = pd.DataFrame(predictions, columns = ['image_id', 'caption'])
 	print('\nWriting predictions to file "{}".'.format(system_caption_file))
@@ -304,6 +329,6 @@ df_scores = pd.DataFrame({'bleu_1': [BLEU_1], 'bleu_2': [BLEU_2],
 						  'BLEU_comb' : [BLEU_comb], 'METEOR' : [METEOR],
 						  'ROUGE_L' : [ROUGE_L] })
 
-df_scores.to_csv('scores_karpathy_test_predictions.csv')
+df_scores.to_csv(system_scores_df)
 
 print('[INFO] Scores. Bleu 1 = {:.4} Bleu 2 = {:.4} Bleu 3 = {:.4} Bleu 4 = {:.4} Bleu_comb = {:.4} METEOR = {:.4} ROUGE_L = {:.4}'.format(BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L))
