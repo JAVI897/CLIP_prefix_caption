@@ -330,7 +330,7 @@ if not os.path.isfile(system_caption_file):
 	print('\nWriting predictions to file "{}".'.format(system_caption_file))
 	coco_res_df.to_json(system_caption_file, orient='records')
 
-df_results = pd.read_csv('karpathy_test_predictions.csv')
+df_results = pd.read_csv(system_predictions_df)
 BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L = compute_metrics(df_results)
 
 df_scores = pd.DataFrame({'bleu_1': [BLEU_1], 'bleu_2': [BLEU_2], 
