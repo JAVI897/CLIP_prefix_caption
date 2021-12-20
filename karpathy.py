@@ -249,17 +249,21 @@ def compute_metrics(df_results):
 	return BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L
 
 def best_n_sim_clip(text_captions, image_features, clip_model):
-	best = None
-	hypothesis = None
-	best_sim = -1000000 
+	best = text_captions[0]
+	hypothesis = 0
+	best_sim = -1000000
 	for i, caption in enumerate(text_captions):
-		tokens = clip.tokenize([caption]).to(device).long()
-		text_features = clip_model.encode_text(tokens).detach()
-		sim = torch.cosine_similarity(text_features, image_features).cpu().numpy()[0]
-		if sim > best_sim:
-			best = caption
-			best_sim = sim
-			hypothesis = i
+		try:
+			tokens = clip.tokenize([caption]).to(device).long()
+			text_features = clip_model.encode_text(tokens).detach()
+			sim = torch.cosine_similarity(text_features, image_features).cpu().numpy()[0]
+			if sim > best_sim:
+				best = caption
+				best_sim = sim
+				hypothesis = i
+		except: # if context length is too long it will raise an error
+			pass
+
 	return best, best_sim, hypothesis
 
 is_gpu = True #@param {type:"boolean"}  
