@@ -21,15 +21,15 @@ import nltk
 from rouge_score import rouge_scorer
 from train import ClipCaptionPrefix
 # saving names
-system_caption_file = 'system_caption_file_max_sim_clip.json'
-system_predictions_df = 'karpathy_test_predictions_max_sim_clip.csv'
-system_scores_df = 'scores_karpathy_test_predictions_max_sim_clip.csv'
-max_sim_clip = True
+#system_caption_file = 'system_caption_file_max_sim_clip.json'
+#system_predictions_df = 'karpathy_test_predictions_max_sim_clip.csv'
+#system_scores_df = 'scores_karpathy_test_predictions_max_sim_clip.csv'
+#max_sim_clip = True
 ## saving names when no max_sim_clip is done
-#system_caption_file = 'system_caption_file.json'
-#system_predictions_df = 'karpathy_test_predictions.csv'
-#system_scores_df = 'scores_karpathy_test_predictions.csv'
-#max_sim_clip = False
+system_caption_file = 'system_caption_file.json'
+system_predictions_df = 'karpathy_test_predictions.csv'
+system_scores_df = 'scores_karpathy_test_predictions.csv'
+max_sim_clip = False
 
 nltk.download('punkt')
 nltk.download('wordnet')
