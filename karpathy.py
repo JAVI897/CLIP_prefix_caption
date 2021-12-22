@@ -224,12 +224,12 @@ def compute_metrics(df_results):
 		BLEU_comb += bleu
 
 		# METEOR
-        #meteor = 0
-        #for h, r in zip([candidate]*5, references):
-        #    meteor += single_meteor_score(r, h)
-        #meteor = meteor/5
-        meteor = meteor_score.meteor_score(references, candidate)
-        METEOR += meteor
+		#meteor = 0
+		#for h, r in zip([candidate]*5, references):
+		#    meteor += single_meteor_score(r, h)
+		#meteor = meteor/5
+		meteor = meteor_score.meteor_score(references, candidate)
+		METEOR += meteor
 
 		# ROUGE-L
 		rouge_l = 0
