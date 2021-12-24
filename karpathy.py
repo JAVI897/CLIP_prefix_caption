@@ -15,15 +15,16 @@ import json
 parser = argparse.ArgumentParser()
 
 parser.add_argument("--beam_size", type=int, default=5)
-parser.add_argument("--maximize_clip", type=bool, default=True)
+parser.add_argument("--maximize_clip", type=str, default='yes')
 parser.add_argument("--similarity_clip", type=str, default='cos')
 con = parser.parse_args()
 
 def configuration():
-	output_predictions = 'karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.csv'.format(con.maximize_clip, con.beam_size, con.similarity_clip)
-	output_scores = 'scores_karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.csv'.format(con.maximize_clip, con.beam_size, con.similarity_clip)
+	maximize_clip = True if con.maximize_clip == 'yes' else False
+	output_predictions = 'karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.csv'.format(maximize_clip, con.beam_size, con.similarity_clip)
+	output_scores = 'scores_karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.csv'.format(maximize_clip, con.beam_size, con.similarity_clip)
 	config ={'beam_size': con.beam_size,
-			 'maximize_clip': con.maximize_clip,
+			 'maximize_clip': maximize_clip,
 			 'similarity_clip': con.similarity_clip,
 			 'output_predictions': output_predictions,
 			 'output_scores' : output_scores }
