@@ -3,6 +3,7 @@ import pandas as pd
 import torch
 import os
 import numpy as np
+import argparse
 from typing import Tuple, List, Union, Optional
 from train import ClipCaptionPrefix
 from transformers import GPT2Tokenizer, GPT2LMHeadModel, AdamW, get_linear_schedule_with_warmup
