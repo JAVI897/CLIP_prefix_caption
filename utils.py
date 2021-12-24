@@ -213,11 +213,13 @@ def best_n_sim_clip(text_captions, image_features, clip_model, similarity = 'cos
 				sim = torch.cosine_similarity(text_features, image_features).cpu().numpy()[0]
 			else:
 				sim = torch.cosine_similarity(text_features, image_features).cpu().numpy()[0] # todo: use a different similarity metric
+			print(caption, ':', sim)
 			if sim > best_sim:
 				best = caption
 				best_sim = sim
 				hypothesis = i
 		except: # if context length is too long it will raise an error
+			print('Error')
 			pass
 
 	return best, best_sim, hypothesis
