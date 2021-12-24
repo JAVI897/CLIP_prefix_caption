@@ -19,11 +19,11 @@ parser.add_argument("--similarity_clip", type=str, default='cos')
 con = parser.parse_args()
 
 def configuration():
-	output_predictions = 'karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similiraty_clip_{}.csv'.format(con.maximize_clip, con.beam_size, con.similiraty_clip)
-	output_scores = 'scores_karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similiraty_clip_{}.csv'.format(con.maximize_clip, con.beam_size, con.similiraty_clip)
+	output_predictions = 'karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similiraty_clip_{}.csv'.format(con.maximize_clip, con.beam_size, con.similarity_clip)
+	output_scores = 'scores_karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similiraty_clip_{}.csv'.format(con.maximize_clip, con.beam_size, con.similarity_clip)
 	config ={'beam_size': con.beam_size,
 			 'maximize_clip': con.maximize_clip,
-			 'similiraty_clip': con.similiraty_clip,
+			 'similarity_clip': con.similarity_clip,
 			 'output_predictions': output_predictions,
 			 'output_scores' : output_scores }
 	return config
