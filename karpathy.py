@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("--beam_size", type=int, default=5)
 parser.add_argument("--maximize_clip", type=bool, default=True)
-parser.add_argument("--similiraty_clip", type=str, default='cos')
+parser.add_argument("--similarity_clip", type=str, default='cos')
 con = parser.parse_args()
 
 def configuration():
@@ -96,7 +96,7 @@ def main():
 
 			if config['maximize_clip']:
 				text_captions = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)
-				text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model, similarity = config['similiraty_clip'])
+				text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model, similarity = config['similarity_clip'])
 				print("PREDICT CAPTION: %s COSINE SIMILARITY: %s HYPOTHESIS: %s BEAM SIZE: 20 " %(text_caption, clip_sim, hypothesis))
 			else:
 				text_caption = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)[0]
