@@ -206,17 +206,17 @@ def best_n_sim_clip(text_captions, image_features, clip_model, similarity = 'cos
 	hypothesis = 0
 	best_sim = -1000000
 	for i, caption in enumerate(text_captions):
-		try:
-			tokens = clip.tokenize([caption]).to(device).long()
-			text_features = clip_model.encode_text(tokens).detach()
-			if similarity == 'cos':
-				sim = torch.cosine_similarity(text_features, image_features).cpu().numpy()[0]
-			else:
-				sim = torch.cosine_similarity(text_features, image_features).cpu().numpy()[0] # todo: use a different similarity metric
-			if sim > best_sim:
-				best = caption
-				best_sim = sim
-				hypothesis = i
+		#try:
+		tokens = clip.tokenize([caption]).to(device).long()
+		text_features = clip_model.encode_text(tokens).detach()
+		if similarity == 'cos':
+			sim = torch.cosine_similarity(text_features, image_features).cpu().numpy()[0]
+		else:
+			sim = torch.cosine_similarity(text_features, image_features).cpu().numpy()[0] # todo: use a different similarity metric
+		if sim > best_sim:
+			best = caption
+			best_sim = sim
+			hypothesis = i
 		#except: # if context length is too long it will raise an error
 		#	print('Error')
 		#	pass
