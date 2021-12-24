@@ -23,12 +23,6 @@ from train import ClipCaptionPrefix
 nltk.download('punkt')
 nltk.download('wordnet')
 
-def get_device(device_id: int) -> D:
-	if not torch.cuda.is_available():
-		return CPU
-	device_id = min(torch.cuda.device_count() - 1, device_id)
-	return torch.device(f'cuda:{device_id}')
-
 def generate_beam(model, tokenizer, beam_size: int = 20, prompt=None, embed=None,
 				  entry_length=67, temperature=1., stop_token: str = '.'):
 
