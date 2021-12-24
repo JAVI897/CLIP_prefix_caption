@@ -28,12 +28,6 @@ def configuration():
 			 'output_scores' : output_scores }
 	return config
 
-def get_device(device_id: int) -> D:
-	if not torch.cuda.is_available():
-		return CPU
-	device_id = min(torch.cuda.device_count() - 1, device_id)
-	return torch.device(f'cuda:{device_id}')
-
 def main():
 	config = configuration()
 	N = type(None)
@@ -49,8 +43,14 @@ def main():
 	TNS = Union[Tuple[TN, ...], List[TN]]
 	TSN = Optional[TS]
 	TA = Union[T, ARRAY]
-
 	D = torch.device
+
+	def get_device(device_id: int) -> D:
+		if not torch.cuda.is_available():
+			return CPU
+		device_id = min(torch.cuda.device_count() - 1, device_id)
+		return torch.device(f'cuda:{device_id}')
+
 	CPU = torch.device('cpu')
 	CUDA = get_device
 	current_directory = os.getcwd()
