@@ -10,6 +10,7 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel, AdamW, get_linear_sched
 import clip
 import skimage.io as io
 import PIL.Image
+import json
 
 parser = argparse.ArgumentParser()
 

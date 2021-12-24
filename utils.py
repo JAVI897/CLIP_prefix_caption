@@ -1,17 +1,13 @@
 import clip
 import os
-import json
 import pandas as pd
 from torch import nn
 import numpy as np
 import torch
 import torch.nn.functional as nnf
 import sys
-from typing import Tuple, List, Union, Optional
 from transformers import GPT2Tokenizer, GPT2LMHeadModel, AdamW, get_linear_schedule_with_warmup
 from tqdm import tqdm, trange
-import skimage.io as io
-import PIL.Image
 from enum import Enum
 from nltk.translate.bleu_score import sentence_bleu as bleu_score
 from nltk.translate.meteor_score import single_meteor_score
