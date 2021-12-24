@@ -201,7 +201,7 @@ def compute_metrics(df_results):
 	ROUGE_L = ROUGE_L/N
 	return BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L
 
-def best_n_sim_clip(text_captions, image_features, clip_model, similarity = 'cos'):
+def best_n_sim_clip(text_captions, image_features, clip_model, device, similarity = 'cos'):
 	best = text_captions[0]
 	hypothesis = 0
 	best_sim = -1000000
