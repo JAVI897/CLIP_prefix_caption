@@ -99,7 +99,7 @@ def main():
 			if config['maximize_clip']:
 				text_captions = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)
 				text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model, device, similarity = config['similarity_clip'])
-				print("PREDICT CAPTION: %s COSINE SIMILARITY: %s HYPOTHESIS: %s BEAM SIZE: {} " %(text_caption, clip_sim, hypothesis, config['beam_size']))
+				print("PREDICT CAPTION: {} COSINE SIMILARITY: {:.3} HYPOTHESIS: {} BEAM SIZE: {} ".format(text_caption, clip_sim, hypothesis, config['beam_size']))
 			else:
 				text_caption = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)[0]
 				print("PREDICT CAPTION: %s" %(text_caption))
