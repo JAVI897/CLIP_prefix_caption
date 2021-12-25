@@ -6,6 +6,8 @@ import numpy as np
 import torch
 import torch.nn.functional as nnf
 import sys
+import skimage.io as io
+import PIL.Image
 from transformers import GPT2Tokenizer, GPT2LMHeadModel, AdamW, get_linear_schedule_with_warmup
 from tqdm import tqdm, trange
 from enum import Enum
@@ -157,6 +159,7 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model):
 		caption1, caption2, caption3, caption4, caption5, prediction = df_row['caption1'], df_row['caption2'], df_row['caption3'], df_row['caption4'], df_row['caption5'], df_row['prediction']  
 
 		# CLIP-S
+		print('[INFO] Computing ClipScore for image {}'.format(name_img))
 		with torch.no_grad():
 			tokens = clip.tokenize([prediction]).to(device).long()
 			text_features = clip_model.encode_text(tokens).detach()
@@ -167,7 +170,7 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model):
 		CLIP_SCORE += clip_score
 	CLIP_SCORE = CLIP_SCORE / N
 	return CLIP_SCORE
-	
+
 def compute_metrics(df_results):
 	N = 0
 	BLEU_1 = 0
