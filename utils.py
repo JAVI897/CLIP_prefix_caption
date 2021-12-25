@@ -145,6 +145,15 @@ def generate2(
 	return generated_list[0]
 
 def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, preprocess):
+	'''
+	Code for CLIPScore (https://arxiv.org/abs/2104.08718)
+	@inproceedings{hessel2021clipscore,
+	  title={{CLIPScore:} A Reference-free Evaluation Metric for Image Captioning},
+	  author={Hessel, Jack and Holtzman, Ari and Forbes, Maxwell and Bras, Ronan Le and Choi, Yejin},
+	  booktitle={EMNLP},
+	  year={2021}
+	}
+	'''
 	N = 0
 	CLIP_SCORE = 0
 	file = open(dir_images,'r')
