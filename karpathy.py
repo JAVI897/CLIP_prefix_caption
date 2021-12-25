@@ -113,14 +113,15 @@ def main():
 
 	df_results = pd.read_csv(config['output_predictions'])
 	BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L = compute_metrics(df_results)
-	CLIP_SCORE = clipscore_karpathy_directories('data/coco/karpathy_valid_images.txt', df_results, device, clip_model, preprocess)
+	CLIP_SCORE, REFCLIP_SCORE = clipscore_karpathy_directories('data/coco/karpathy_valid_images.txt', df_results, device, clip_model, preprocess)
 	df_scores = pd.DataFrame({'bleu_1': [BLEU_1], 'bleu_2': [BLEU_2], 
 							  'bleu_3': [BLEU_3], 'bleu_4': [BLEU_4],
 							  'BLEU_comb' : [BLEU_comb], 'METEOR' : [METEOR],
-							  'ROUGE_L' : [ROUGE_L], 'CLIPScore' : [CLIP_SCORE] })
+							  'ROUGE_L' : [ROUGE_L], 'CLIPScore' : [CLIP_SCORE],
+							  'REFCLIP_SCORE' : [REFCLIP_SCORE] })
 
 	df_scores.to_csv(config['output_scores'])
-	print('[INFO] Scores. Bleu 1 = {:.4} Bleu 2 = {:.4} Bleu 3 = {:.4} Bleu 4 = {:.4} Bleu_comb = {:.4} METEOR = {:.4} ROUGE_L = {:.4} CLIPScore = {:.4}'.format(BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L, CLIP_SCORE))
+	print('[INFO] Scores. Bleu 1 = {:.4} Bleu 2 = {:.4} Bleu 3 = {:.4} Bleu 4 = {:.4} Bleu_comb = {:.4} METEOR = {:.4} ROUGE_L = {:.4} CLIPScore = {:.4} RefCLIPScore = {:.4}'.format(BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L, CLIP_SCORE, REFCLIP_SCORE))
 
 if __name__ == '__main__':
 	main()

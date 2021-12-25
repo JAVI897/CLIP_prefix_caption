@@ -1,5 +1,6 @@
 import clip
 import os
+import statistics as stats
 import pandas as pd
 from torch import nn
 import numpy as np
@@ -177,15 +178,22 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, p
 		clip_score = 2.5*np.clip( torch.cosine_similarity(text_features, image_features).cpu().numpy()[0], 0, None)
 		
 		# RefCLIPScore
-		#clip_score_references = []
-		#for ref in [caption1, caption2, caption3, caption4, caption5]:
-		#	pass
-		#max_clip_score_candidates = max(clip_score_candidates)
+		clip_score_references = []
+		for ref in [caption1, caption2, caption3, caption4, caption5]:
+			tokens_ref = clip.tokenize([ref]).to(device).long()
+			ref_text_feature = clip_model.encode_text(tokens_ref).detach()
+			ref_score = np.clip( torch.cosine_similarity(text_features, ref_text_feature).cpu().numpy()[0], 0, None)
+			clip_score_references.append(ref_score)
+		max_clip_score_references = max(clip_score_references)
+		refclip_score = stats.harmonic_mean([clip_score, max_clip_score_references])
 
 		N += 1
 		CLIP_SCORE += clip_score
+		REFCLIP_SCORE += refclip_score
+
 	CLIP_SCORE = CLIP_SCORE / N
-	return CLIP_SCORE
+	REFCLIP_SCORE = REFCLIP_SCORE / N
+	return CLIP_SCORE, REFCLIP_SCORE
 
 def compute_metrics(df_results):
 	N = 0
