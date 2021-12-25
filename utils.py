@@ -156,6 +156,7 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, p
 	'''
 	N = 0
 	CLIP_SCORE = 0
+	REFCLIP_SCORE = 0
 	file = open(dir_images,'r')
 	for ind_image, test_img in enumerate(file.readlines()):
 		file_path, number_instance = test_img.split()
@@ -174,6 +175,12 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, p
 			text_features = clip_model.encode_text(tokens).detach()
 			image_features = clip_model.encode_image(image).to(device, dtype=torch.float32)
 		clip_score = 2.5*np.clip( torch.cosine_similarity(text_features, image_features).cpu().numpy()[0], 0, None)
+		
+		# RefCLIPScore
+		#clip_score_references = []
+		#for ref in [caption1, caption2, caption3, caption4, caption5]:
+		#	pass
+		#max_clip_score_candidates = max(clip_score_candidates)
 
 		N += 1
 		CLIP_SCORE += clip_score
