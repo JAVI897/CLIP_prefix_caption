@@ -142,7 +142,32 @@ def generate2(
 
 	return generated_list[0]
 
+def clipscore_karpathy_directories(dir_images, df_results, device, clip_model):
+	N = 0
+	CLIP_SCORE = 0
+	file = open(dir_images,'r')
+	for ind_image, test_img in enumerate(file.readlines()):
+		file_path, number_instance = test_img.split()
+		_, name_img = file_path.split('/')
+		name_img = 'data/coco/val2014/'+ name_img
+		image = io.imread(name_img)
+		pil_image = PIL.Image.fromarray(image)
+		image = preprocess(pil_image).unsqueeze(0).to(device)
+		df_row = df_results.iloc[ind_image]
+		caption1, caption2, caption3, caption4, caption5, prediction = df_row['caption1'], df_row['caption2'], df_row['caption3'], df_row['caption4'], df_row['caption5'], df_row['prediction']  
 
+		# CLIP-S
+		with torch.no_grad():
+			tokens = clip.tokenize([prediction]).to(device).long()
+			text_features = clip_model.encode_text(tokens).detach()
+			image_features = clip_model.encode_image(image).to(device, dtype=torch.float32)
+		clip_score = 2.5*np.clip( torch.cosine_similarity(text_features, image_features).cpu().numpy()[0], 0, None)
+
+		N += 1
+		CLIP_SCORE += clip_score
+	CLIP_SCORE = CLIP_SCORE / N
+	return CLIP_SCORE
+	
 def compute_metrics(df_results):
 	N = 0
 	BLEU_1 = 0
