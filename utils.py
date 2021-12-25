@@ -156,7 +156,7 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, p
 		pil_image = PIL.Image.fromarray(image)
 		image = preprocess(pil_image).unsqueeze(0).to(device)
 		df_row = df_results.iloc[ind_image]
-		caption1, caption2, caption3, caption4, caption5, prediction = df_row['caption1'], df_row['caption2'], df_row['caption3'], df_row['caption4'], df_row['caption5'], df_row['prediction']  
+		caption1, caption2, caption3, caption4, caption5, prediction = df_row['caption 1'], df_row['caption 2'], df_row['caption 3'], df_row['caption 4'], df_row['caption 5'], df_row['prediction']  
 
 		# CLIP-S
 		print('[INFO] Computing ClipScore for image {}'.format(name_img))
