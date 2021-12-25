@@ -113,7 +113,7 @@ def main():
 
 	df_results = pd.read_csv(config['output_predictions'])
 	BLEU_1, BLEU_2, BLEU_3, BLEU_4, BLEU_comb, METEOR, ROUGE_L = compute_metrics(df_results)
-	CLIP_SCORE = clipscore_karpathy_directories('data/coco/karpathy_valid_images.txt', df_results, device, clip_model)
+	CLIP_SCORE = clipscore_karpathy_directories('data/coco/karpathy_valid_images.txt', df_results, device, clip_model, preprocess)
 	df_scores = pd.DataFrame({'bleu_1': [BLEU_1], 'bleu_2': [BLEU_2], 
 							  'bleu_3': [BLEU_3], 'bleu_4': [BLEU_4],
 							  'BLEU_comb' : [BLEU_comb], 'METEOR' : [METEOR],

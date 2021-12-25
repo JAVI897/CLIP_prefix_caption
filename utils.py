@@ -144,7 +144,7 @@ def generate2(
 
 	return generated_list[0]
 
-def clipscore_karpathy_directories(dir_images, df_results, device, clip_model):
+def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, preprocess):
 	N = 0
 	CLIP_SCORE = 0
 	file = open(dir_images,'r')
