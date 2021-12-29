@@ -28,10 +28,11 @@ def main():
 	df_results = pd.read_csv(config['output_predictions'])
 	with open('refs.json') as json_file:
 		refs = json.load(json_file)
-	candidates = [(k, None) for k, _ in refs.items()]
+	candidates = [[k, None] for k, _ in refs.items()]
 	cont = 0
 	for index, row in df_results.iterrows():
 		candidates[cont][1] = row['prediction']
+		candidates[cont] = tuple(candidates[cont])
 		cont += 1
 	candidates = dict(candidates)
 
