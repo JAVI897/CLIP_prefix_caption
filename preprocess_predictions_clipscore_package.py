@@ -17,7 +17,7 @@ def configuration():
 			 'maximize_clip': maximize_clip,
 			 'similarity_clip': con.similarity_clip,
 			 'output_predictions': output_predictions,
-			 'output_candidates':,
+			 'output_candidates':output_candidates,
 			 'output_scores' : output_scores }
 	return config
 
@@ -35,7 +35,7 @@ def main():
 	candidates = dict(candidates)
 
 	with open(config['output_candidates'], 'w') as fp:
-    	json.dump(candidates, fp)
+		json.dump(candidates, fp)
 
 if __name__ == '__main__':
 	main()
