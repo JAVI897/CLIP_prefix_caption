@@ -6,7 +6,9 @@ from utils import generate_beam, compute_metrics, best_n_sim_clip
 class ClipGAProblem(ElementwiseProblem):
 
 	def __init__(self, config):
-		super().__init__(n_var=768*40, n_obj=1, n_constr=1, xl=0.0, xu=1.0)
+		xl = np.zeros(768*40)
+		xu = np.ones(768*40)
+		super().__init__(n_var=768*40, n_obj=1, n_constr=1, xl=xl, xu=xu)
 		self.config = config
 
 	def _evaluate(self, x, out, *args, **kwargs):
