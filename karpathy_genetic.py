@@ -43,8 +43,8 @@ def genetic_alg(prefix_embed, config):
 			    'ga',
 			    pop_size=population_size,
 			    sampling= initial_solutions,
-			    crossover=get_crossover("real_sbx", prob=1.0, eta=2.0),
-			    mutation=get_mutation("real_pm", prob=0.7, eta=3),
+			    crossover=get_crossover("real_sbx", prob=0.3, eta=5.0),
+			    mutation=get_mutation("real_pm", prob=0.7, eta=5),
 		
 			)
 
