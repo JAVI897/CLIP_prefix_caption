@@ -35,7 +35,7 @@ def configuration():
 def genetic_alg(prefix_embed, config):
 	population_size = 10
 	# Generate initial population
-	r1, r2 = -100, 100
+	r1, r2 = -50, 50
 	initial_solutions = [ prefix_embed + ( (r1 - r2) * torch.randn(prefix_embed.shape[0]).to(config['device'], dtype=torch.float32) + r2) for i in range(population_size)]
 	initial_solutions + [prefix_embed]
 	initial_solutions = torch.stack(initial_solutions, 0).cpu().numpy()
@@ -57,7 +57,7 @@ def genetic_alg(prefix_embed, config):
 			    verbose=True,
 			    seed = 344
 			)
-	print(res.X)
+	print(res.X.shape)
 	
 	return prefix_embed
 
