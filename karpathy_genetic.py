@@ -33,7 +33,7 @@ def configuration():
 	return config
 
 def genetic_alg(prefix_embed, config):
-	population_size = 20
+	population_size = 5
 	# Generate initial population
 	initial_solutions = [ prefix_embed + torch.randn(prefix_embed.shape[0]).to(config['device'], dtype=torch.float32) for i in range(population_size)]
 	initial_solutions + [prefix_embed]
@@ -44,7 +44,7 @@ def genetic_alg(prefix_embed, config):
 			    pop_size=population_size,
 			    sampling= initial_solutions,
 			    crossover=get_crossover("real_sbx", prob=1.0, eta=2.0),
-			    mutation=get_mutation("real_pm", prob=0.7, eta=2),
+			    mutation=get_mutation("real_pm", prob=0.7, eta=3),
 		
 			)
 
