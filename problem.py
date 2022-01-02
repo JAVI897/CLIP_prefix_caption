@@ -6,8 +6,8 @@ from utils import generate_beam, compute_metrics, best_n_sim_clip
 class ClipGAProblem(ElementwiseProblem):
 
 	def __init__(self, config):
-		xl = np.zeros(768*40)
-		xu = np.ones(768*40)
+		xl = -10*np.ones(768*40)
+		xu =  10*np.ones(768*40)
 		super().__init__(n_var=768*40, n_obj=1, n_constr=1, xl=xl, xu=xu)
 		self.config = config
 
@@ -17,4 +17,4 @@ class ClipGAProblem(ElementwiseProblem):
 		text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, self.config['prefix'], self.config['clip_model'], self.config['device'], 
 															 similarity = self.config['similarity_clip'])
 		out["F"] = -clip_sim
-		out["G"] = np.zeros((x.shape[0]))
+		out["G"] = np.column_stack([10 - out["F"], out["F"] - 10])
