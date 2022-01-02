@@ -33,7 +33,7 @@ def configuration():
 	return config
 
 def genetic_alg(prefix_embed, config):
-	population_size = 50
+	population_size = 20
 	# Generate initial population
 	initial_solutions = [ prefix_embed + torch.randn(prefix_embed.shape[0]).to(config['device'], dtype=torch.float32) for i in range(population_size)]
 	initial_solutions + [prefix_embed]
@@ -43,7 +43,7 @@ def genetic_alg(prefix_embed, config):
 			    'ga',
 			    pop_size=population_size,
 			    sampling= initial_solutions,
-			    crossover=get_crossover("real_sbx", prob=1.0, eta=1.0),
+			    crossover=get_crossover("real_sbx", prob=1.0, eta=2.0),
 			    mutation=get_mutation("real_pm", prob=0.7, eta=2),
 		
 			)
@@ -57,8 +57,7 @@ def genetic_alg(prefix_embed, config):
 			    seed = 344
 			)
 	
-	#return res.X
-	return prefix_embed
+	return res.X
 
 def main():
 	config = configuration()
@@ -134,7 +133,7 @@ def main():
 			prefix_embed_flattened = torch.flatten(prefix_embed)
 			prefix_embed = genetic_alg(prefix_embed_flattened, config)
 
-			#prefix_embed = torch.from_numpy(prefix_embed).to(device, dtype=torch.float32)
+			prefix_embed = torch.from_numpy(prefix_embed).to(device, dtype=torch.float32)
 			prefix_embed = prefix_embed.reshape(1, prefix_length, -1)
 			text_captions = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)
 			text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model, device, similarity = config['similarity_clip'])
