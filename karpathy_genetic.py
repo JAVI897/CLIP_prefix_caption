@@ -102,7 +102,7 @@ def main():
 	config['tokenizer'] = tokenizer
 	config['clip_model'] = clip_model
 	config['device'] = device 
-
+	config['prefix_length'] = prefix_length
 	#Get ground truth captions validation
 	with open('data/coco/karpathy_validation_captions.json') as json_file:
 		captions_valid_test = json.load(json_file)
@@ -125,11 +125,12 @@ def main():
 				prefix = clip_model.encode_image(image).to(device, dtype=torch.float32)
 				config['prefix'] = prefix
 				#prefix = prefix / prefix.norm(2, -1).item()
-				prefix_embed = model.clip_project(prefix).reshape(1, prefix_length, -1)
+				prefix_embed = model.clip_project(prefix)
 
 			print(prefix_embed)
 			print(prefix_embed.shape)
 			prefix_embed = genetic_alg(prefix_embed, config)
+			prefix_embed = prefix_embed.reshape(1, prefix_length, -1)
 			break
 			text_captions = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)
 			text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model, device, similarity = config['similarity_clip'])
