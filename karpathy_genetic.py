@@ -38,9 +38,8 @@ def genetic_alg(prefix_embed, config):
 	initial_solutions = [ prefix_embed + torch.randn(prefix_embed.shape[0]).to(config['device'], dtype=torch.float32) for i in range(population_size)]
 	initial_solutions + [prefix_embed]
 	initial_solutions = torch.stack(initial_solutions, 0)
-	print(initial_solutions)
-	print(initial_solutions.shape)
-	"""
+
+	
 	algorithm = get_algorithm(
 			    'ga',
 			    pop_size=population_size,
@@ -59,7 +58,7 @@ def genetic_alg(prefix_embed, config):
 			    seed = 344
 			)
 	print(res.X)
-	"""
+	
 	return prefix_embed
 
 def main():
