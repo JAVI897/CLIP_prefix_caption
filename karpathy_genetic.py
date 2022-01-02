@@ -14,6 +14,7 @@ import json
 from pymoo.optimize import minimize
 from pymoo.factory import get_algorithm, get_decision_making, get_decomposition
 from pymoo.factory import get_sampling, get_crossover, get_mutation
+from problem import ClipGAProblem
 
 parser = argparse.ArgumentParser()
 
@@ -32,13 +33,16 @@ def configuration():
 	return config
 
 def genetic_alg(prefix_embed, config):
-
+	population_size = 100
 	# Generate initial population
-	initial_solutions = None
-
+	initial_solutions = [ prefix_embed + torch.randn(prefix_embed.shape[0]) for i in range(population_size)]
+	initial_solutions = torch.cat(initial_solutions)
+	print(initial_solutions)
+	print(initial_solutions.shape)
+	"""
 	algorithm = get_algorithm(
 			    'ga',
-			    pop_size=100,
+			    pop_size=population_size,
 			    sampling= initial_solutions,
 			    crossover=get_crossover("int_sbx", prob=1.0, eta=3.0),
 			    mutation=get_mutation("int_pm", prob=0.5, eta=3.0),
@@ -46,7 +50,7 @@ def genetic_alg(prefix_embed, config):
 			)
 
 	res = minimize(
-			    problem,
+			    ClipGAProblem,
 			    algorithm,
 			    ("n_gen", config['generations']),
 			    save_history=False,
@@ -54,6 +58,7 @@ def genetic_alg(prefix_embed, config):
 			    seed = 344
 			)
 	print(res.X)
+	"""
 	return prefix_embed
 
 def main():
@@ -127,17 +132,9 @@ def main():
 				#prefix = prefix / prefix.norm(2, -1).item()
 				prefix_embed = model.clip_project(prefix)
 
-			print(prefix_embed)
-			print(prefix_embed.shape)
 			prefix_embed_flattened = torch.flatten(prefix_embed)
-			print(prefix_embed_flattened)
-			print(prefix_embed_flattened.shape)
-
-			prefix_embed_unflattened = prefix_embed_flattened.reshape(1, prefix_length, -1)
-			print(prefix_embed_unflattened)
-			print(prefix_embed_unflattened.shape)
-			
 			prefix_embed = genetic_alg(prefix_embed, config)
+
 			prefix_embed = prefix_embed.reshape(1, prefix_length, -1)
 			break
 			text_captions = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)
