@@ -7,8 +7,8 @@ from pymoo.core.problem import Problem
 class ClipGAProblem(ElementwiseProblem):
 
 	def __init__(self, config, **kwargs):
-		xl = -10*np.ones(768*40)
-		xu =  10*np.ones(768*40)
+		xl = -100*np.ones(768*40)
+		xu =  100*np.ones(768*40)
 		super().__init__(n_var=768*40, n_obj=1, n_constr=0, xl=xl, xu=xu, **kwargs)
 		self.config = config
 
