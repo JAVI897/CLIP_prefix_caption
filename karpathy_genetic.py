@@ -139,13 +139,12 @@ def main():
 			text_captions = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)
 			text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model, device, similarity = config['similarity_clip'])
 			print("PREDICT CAPTION: {} COSINE SIMILARITY: {:.3} HYPOTHESIS: {} BEAM SIZE: {} ".format(text_caption, clip_sim, hypothesis, config['beam_size']))
-			break
 			caption_img.append(text_caption)
 			captions.append(caption_img)
 
-		#df = pd.DataFrame(captions, columns = ['caption 1', 'caption 2', 'caption 3', 'caption 4', 'caption 5', 'prediction'])
-		#print('\nWriting predictions to file "{}".'.format(config['output_predictions']))
-		#df.to_csv(config['output_predictions'])
+		df = pd.DataFrame(captions, columns = ['caption 1', 'caption 2', 'caption 3', 'caption 4', 'caption 5', 'prediction'])
+		print('\nWriting predictions to file "{}".'.format(config['output_predictions']))
+		df.to_csv(config['output_predictions'])
 
 if __name__ == '__main__':
 	main()
