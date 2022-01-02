@@ -15,6 +15,7 @@ from pymoo.optimize import minimize
 from pymoo.factory import get_algorithm, get_decision_making, get_decomposition
 from pymoo.factory import get_sampling, get_crossover, get_mutation
 from problem import ClipGAProblem
+from pymoo.interface import crossover
 
 parser = argparse.ArgumentParser()
 
@@ -43,7 +44,7 @@ def genetic_alg(prefix_embed, config):
 			    'ga',
 			    pop_size=population_size,
 			    sampling= initial_solutions,
-			    crossover=get_crossover("bin_ux", prob=0.5, -3, 3),
+			    crossover= crossover(get_crossover("bin_ux"), -3, 3),
 			    mutation=get_mutation("real_pm", prob=0.7, eta=5),
 		
 			)
