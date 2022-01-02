@@ -38,7 +38,7 @@ def genetic_alg(prefix_embed, config):
 	# Generate initial population
 	initial_solutions = [ prefix_embed + torch.randn(prefix_embed.shape[0]).to(config['device'], dtype=torch.float32) for i in range(population_size)]
 	initial_solutions + [prefix_embed]
-	initial_solutions = torch.stack(initial_solutions, 0)
+	initial_solutions = torch.stack(initial_solutions, 0).cpu().numpy()
 	
 	algorithm = get_algorithm(
 			    'ga',
@@ -134,7 +134,7 @@ def main():
 			prefix_embed_flattened = torch.flatten(prefix_embed)
 			prefix_embed = genetic_alg(prefix_embed_flattened, config)
 
-			#prefix_embed = torch.from_numpy(prefix_embed).to(device, dtype=torch.float32)
+			prefix_embed = torch.from_numpy(prefix_embed).to(device, dtype=torch.float32)
 			prefix_embed = prefix_embed.reshape(1, prefix_length, -1)
 			text_captions = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)
 			text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model, device, similarity = config['similarity_clip'])
