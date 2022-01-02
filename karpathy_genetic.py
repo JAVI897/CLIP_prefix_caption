@@ -35,7 +35,7 @@ def configuration():
 def genetic_alg(prefix_embed, config):
 	population_size = 10
 	# Generate initial population
-	r1, r2 = -50, 50
+	r1, r2 = -10, 10
 	initial_solutions = [ prefix_embed + ( (r1 - r2) * torch.randn(prefix_embed.shape[0]).to(config['device'], dtype=torch.float32) + r2) for i in range(population_size)]
 	initial_solutions + [prefix_embed]
 	initial_solutions = torch.stack(initial_solutions, 0).cpu().numpy()
@@ -57,9 +57,8 @@ def genetic_alg(prefix_embed, config):
 			    verbose=True,
 			    seed = 344
 			)
-	print(res.X.shape)
 	
-	return prefix_embed
+	return res.X
 
 def main():
 	config = configuration()
@@ -136,11 +135,10 @@ def main():
 			prefix_embed = genetic_alg(prefix_embed_flattened, config)
 
 			prefix_embed = prefix_embed.reshape(1, prefix_length, -1)
-			break
 			text_captions = generate_beam(model, tokenizer, beam_size=config['beam_size'], embed=prefix_embed)
 			text_caption, clip_sim, hypothesis = best_n_sim_clip(text_captions, prefix, clip_model, device, similarity = config['similarity_clip'])
 			print("PREDICT CAPTION: {} COSINE SIMILARITY: {:.3} HYPOTHESIS: {} BEAM SIZE: {} ".format(text_caption, clip_sim, hypothesis, config['beam_size']))
-
+			break
 			caption_img.append(text_caption)
 			captions.append(caption_img)
 
