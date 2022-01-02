@@ -57,7 +57,7 @@ def genetic_alg(prefix_embed, config):
 			    seed = 344
 			)
 	
-	return res.X
+	return prefix_embed
 
 def main():
 	config = configuration()
