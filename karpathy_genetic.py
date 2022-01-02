@@ -37,7 +37,7 @@ def genetic_alg(prefix_embed, config):
 	# Generate initial population
 	initial_solutions = [ prefix_embed + torch.randn(prefix_embed.shape[0]).to(config['device'], dtype=torch.float32) for i in range(population_size)]
 	initial_solutions + [prefix_embed]
-	initial_solutions = torch.stack(initial_solutions, 0).numpy()
+	initial_solutions = torch.stack(initial_solutions, 0).to(config['device']).numpy()
 
 	
 	algorithm = get_algorithm(
