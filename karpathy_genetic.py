@@ -129,6 +129,14 @@ def main():
 
 			print(prefix_embed)
 			print(prefix_embed.shape)
+			prefix_embed_flattened = torch.flatten(prefix_embed)
+			print(prefix_embed_flattened)
+			print(prefix_embed_flattened.shape)
+
+			prefix_embed_unflattened = prefix_embed_flattened.reshape(1, prefix_length, -1)
+			print(prefix_embed_unflattened)
+			print(prefix_embed_unflattened.shape)
+			
 			prefix_embed = genetic_alg(prefix_embed, config)
 			prefix_embed = prefix_embed.reshape(1, prefix_length, -1)
 			break
