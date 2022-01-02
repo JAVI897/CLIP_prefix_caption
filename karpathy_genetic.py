@@ -133,7 +133,7 @@ def main():
 				prefix_embed = model.clip_project(prefix)
 
 			prefix_embed_flattened = torch.flatten(prefix_embed)
-			prefix_embed = genetic_alg(prefix_embed, config)
+			prefix_embed = genetic_alg(prefix_embed_flattened, config)
 
 			prefix_embed = prefix_embed.reshape(1, prefix_length, -1)
 			break
