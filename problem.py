@@ -10,6 +10,7 @@ class ClipGAProblem(Problem):
 		self.config = config
 
 	def _evaluate(self, x, out, *args, **kwargs):
+		print(x)
 		x = torch.tensor(x.astype(int)).long().to(self.config['device'])
 		x_reshaped = x.reshape(1, self.config['prefix_length'], -1)
 		text_captions = generate_beam(self.config['model'], self.config['tokenizer'], beam_size=self.config['beam_size'], embed=x_reshaped)
