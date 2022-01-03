@@ -6,12 +6,18 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("--beam_size", type=int, default=5)
 parser.add_argument("--maximize_clip", type=str, default='yes')
+parser.add_argument("--genetic", type=str, default='no')
+parser.add_argument("--generations", type=int, default=2)
 parser.add_argument("--similarity_clip", type=str, default='cos')
 con = parser.parse_args()
 
 def configuration():
 	maximize_clip = True if con.maximize_clip == 'yes' else False
-	output_predictions = 'karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.csv'.format(maximize_clip, con.beam_size, con.similarity_clip)
+	genetic = True if con.genetic == 'yes' else False
+	if genetic:
+		output_predictions = 'genetic_alg_karpathy_test_predictions_generations{}_beam_size_{}_similarity_clip_{}.csv'.format(con.generations, con.beam_size, con.similarity_clip)
+	else:
+		output_predictions = 'karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.csv'.format(maximize_clip, con.beam_size, con.similarity_clip)
 	output_scores = 'scores_karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.csv'.format(maximize_clip, con.beam_size, con.similarity_clip)
 	output_candidates = 'candidates_karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.json'.format(maximize_clip, con.beam_size, con.similarity_clip)
 	config ={'beam_size': con.beam_size,
