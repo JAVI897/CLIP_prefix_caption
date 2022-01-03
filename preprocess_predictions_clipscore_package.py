@@ -19,7 +19,11 @@ def configuration():
 	else:
 		output_predictions = 'karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.csv'.format(maximize_clip, con.beam_size, con.similarity_clip)
 	output_scores = 'scores_karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.csv'.format(maximize_clip, con.beam_size, con.similarity_clip)
-	output_candidates = 'candidates_karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.json'.format(maximize_clip, con.beam_size, con.similarity_clip)
+	
+	if genetic:
+		output_candidates = 'candidates_genetic_alg_karpathy_test_predictions_generations{}_beam_size_{}_similarity_clip_{}.csv'.format(con.generations, con.beam_size, con.similarity_clip)
+	else:
+		output_candidates = 'candidates_karpathy_test_predictions_max_sim_clip_{}_beam_size_{}_similarity_clip_{}.json'.format(maximize_clip, con.beam_size, con.similarity_clip)
 	config ={'beam_size': con.beam_size,
 			 'maximize_clip': maximize_clip,
 			 'similarity_clip': con.similarity_clip,
