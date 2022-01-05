@@ -1,4 +1,4 @@
-from torchsummary import summary
+from torchinfo import summary
 import pandas as pd
 import torch
 import os
