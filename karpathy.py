@@ -91,10 +91,8 @@ def main():
 			image = io.imread(name_img)
 			pil_image = PIL.Image.fromarray(image)
 			image = preprocess(pil_image).unsqueeze(0).to(device)
-			with torch.no_grad():
+			with torch.no_grad():--
 				prefix = clip_model.encode_image(image).to(device, dtype=torch.float32)
-				print(prefix.shape)
-				break
 				#prefix = prefix / prefix.norm(2, -1).item()
 				prefix_embed = model.clip_project(prefix).reshape(1, prefix_length, -1)
 
