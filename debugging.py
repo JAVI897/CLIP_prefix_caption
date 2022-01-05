@@ -57,4 +57,3 @@ model = model.to(device)
 print(model.clip_project)
 
 summary_transformer = summary(model.clip_project, (1, 512))
-print(summary_transformer)
