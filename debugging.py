@@ -55,5 +55,5 @@ device = CUDA(0) if is_gpu else "cpu"
 model = model.to(device)
 
 
-summary_transformer = summary(model.clip_project)
+summary_transformer = summary(model.clip_project, (1, 512))
 print(summary_transformer)
