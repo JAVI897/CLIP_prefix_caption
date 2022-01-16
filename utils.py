@@ -129,16 +129,16 @@ def generate_based_on_clipscore(
 						aux = torch.cat((tokens, aux_next_token), dim = 1)
 						aux_list = list(aux.squeeze().cpu().numpy())
 						aux_text = tokenizer.decode(aux_list)
-						print(logits[:,aux_next_token])
+
 						# compute clipscore
 						tokens_clip = clip.tokenize([aux_text]).to(device).long()
 						clip_text = clip_model.encode_text(tokens_clip).detach()
 						clipscore = 2.5*np.clip( torch.cosine_similarity(clip_text, clip_image).cpu().numpy()[0], 0, None)
 						Z[ :, aux_next_token] = clipscore
-						#print(Z[ :, aux_next_token] + logits[ :, aux_next_token])
+						print(Z[ :, aux_next_token] + logits[ :, aux_next_token])
 						print(aux_text, 'CLIPScore: ', clipscore)
 					print('----------------')
-					logits = logits + Z
+					logits = 0.3*logits + 0.9*Z
 				next_token = torch.argmax(logits, -1).unsqueeze(0)
 				next_token_embed = model.gpt.transformer.wte(next_token)
 				if tokens is None:
