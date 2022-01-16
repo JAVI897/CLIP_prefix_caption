@@ -93,8 +93,8 @@ def main():
 				prefix_embed = model.clip_project(prefix)
 
 			text_caption = generate_based_on_clipscore(model, tokenizer, embed=prefix_embed) # change greedy approach
-			break
 			print("PREDICT CAPTION: {}".format(text_caption))
+			break
 			caption_img.append(text_caption)
 			captions.append(caption_img)
 
