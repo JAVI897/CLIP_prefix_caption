@@ -124,7 +124,7 @@ def generate_based_on_clipscore(
 					Z[ :, aux_next_token] = clipscore
 					#print(beta*Z[ :, aux_next_token] + gamma*logits[ :, aux_next_token])
 					print(aux_text, 'CLIPScore: ', clipscore)
-				#print('----------------')
+				print('----------------')
 				logits = beta*logits + gamma*Z
 			next_token = torch.argmax(logits, -1).unsqueeze(0)
 			next_token_embed = model.gpt.transformer.wte(next_token)
