@@ -131,7 +131,7 @@ def generate_based_on_clipscore(
 				if tokens is not None:
 					Z = torch.zeros(*logits.shape)
 					for j in range(10):
-						aux_next_token = sorted_indices[:,j]
+						aux_next_token = sorted_indices[:,j].unsqueeze(0)
 						aux = torch.cat((tokens, aux_next_token), dim = 1)
 						aux_list = list(aux.squeeze().cpu().numpy())
 						aux_text = tokenizer.decode(aux_list)
