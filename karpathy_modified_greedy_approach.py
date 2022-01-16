@@ -13,7 +13,6 @@ import PIL.Image
 import json
 
 def main():
-	config = configuration()
 	N = type(None)
 	V = np.array
 	ARRAY = np.ndarray
