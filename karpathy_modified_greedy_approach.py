@@ -19,8 +19,8 @@ parser.add_argument("--beta", type=float, default=0.3)
 con = parser.parse_args()
 
 def configuration():
-	output_predictions = 'modified_greedy_approach_karpathy_test_predictions_gamma_{}.csv'.format(con.gamma)
-	output_scores = 'scores_modified_greedy_approach_karpathy_test_predictions_gamma_{}.csv'.format(con.gamma)
+	output_predictions = 'modified_greedy_approach_karpathy_test_predictions_gamma_{}_beta_{}.csv'.format(con.gamma, con.beta)
+	output_scores = 'scores_modified_greedy_approach_karpathy_test_predictions_gamma_{}_beta_{}.csv'.format(con.gamma, con.beta)
 	config ={
 			 'gamma': con.gamma,
 			 'beta': con.beta,
