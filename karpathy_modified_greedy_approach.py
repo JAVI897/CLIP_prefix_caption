@@ -12,7 +12,23 @@ import skimage.io as io
 import PIL.Image
 import json
 
+parser = argparse.ArgumentParser()
+
+parser.add_argument("--gamma", type=float, default=1)
+con = parser.parse_args()
+
+def configuration():
+	output_predictions = 'modified_greedy_approach_karpathy_test_predictions_gamma_{}.csv'.format(con.gamma)
+	output_scores = 'scores_modified_greedy_approach_karpathy_test_predictions_gamma_{}.csv'.format(con.gamma)
+	config ={
+			 'gamma': con.gamma,
+			 'output_predictions': output_predictions,
+			 'output_scores' : output_scores 
+			 }
+	return config
+
 def main():
+	config = configuration()
 	N = type(None)
 	V = np.array
 	ARRAY = np.ndarray
