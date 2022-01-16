@@ -130,10 +130,9 @@ def generate_based_on_clipscore(
 				logits[:, indices_to_remove] = filter_value
 				if tokens is not None:
 					Z = torch.zeros(*logits.shape)
-					print('Z shape: ', Z.shape)
 					for j in range(10):
 						aux_next_token = sorted_indices[:,j]
-						aux = torch.cat((tokens, next_token), dim = 1)
+						aux = torch.cat((tokens, aux_next_token), dim = 1)
 						aux_list = list(aux.squeeze().cpu().numpy())
 						aux_text = tokenizer.decode(aux_list)
 						print(aux_text)
