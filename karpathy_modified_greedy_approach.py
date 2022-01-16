@@ -14,7 +14,8 @@ import json
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--gamma", type=float, default=1)
+parser.add_argument("--gamma", type=float, default=0.9)
+parser.add_argument("--beta", type=float, default=0.3)
 con = parser.parse_args()
 
 def configuration():
@@ -22,6 +23,7 @@ def configuration():
 	output_scores = 'scores_modified_greedy_approach_karpathy_test_predictions_gamma_{}.csv'.format(con.gamma)
 	config ={
 			 'gamma': con.gamma,
+			 'beta': con.beta,
 			 'output_predictions': output_predictions,
 			 'output_scores' : output_scores 
 			 }
@@ -92,7 +94,8 @@ def main():
 				#prefix = prefix / prefix.norm(2, -1).item()
 				prefix_embed = model.clip_project(prefix)
 
-			text_caption = generate_based_on_clipscore(model, tokenizer, prefix, clip_model, embed=prefix_embed) # change greedy approach
+			text_caption = generate_based_on_clipscore(model, tokenizer, prefix, clip_model,
+													   gamma = config['gamma'], beta =config['beta'], embed=prefix_embed) # change greedy approach
 			print("PREDICT CAPTION: {}".format(text_caption))
 			break
 			caption_img.append(text_caption)
