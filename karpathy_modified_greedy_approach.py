@@ -92,7 +92,7 @@ def main():
 				#prefix = prefix / prefix.norm(2, -1).item()
 				prefix_embed = model.clip_project(prefix)
 
-			text_caption = generate_based_on_clipscore(model, tokenizer, embed=prefix_embed) # change greedy approach
+			text_caption = generate_based_on_clipscore(model, tokenizer, prefix, clip_model, embed=prefix_embed) # change greedy approach
 			print("PREDICT CAPTION: {}".format(text_caption))
 			break
 			caption_img.append(text_caption)
