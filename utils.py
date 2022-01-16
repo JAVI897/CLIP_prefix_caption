@@ -130,6 +130,7 @@ def generate_based_on_clipscore(
 
 				indices_to_remove = sorted_indices[sorted_indices_to_remove]
 				logits[:, indices_to_remove] = filter_value
+				logits = logits.softmax(-1)
 				if tokens is not None:
 					Z = torch.zeros(*logits.shape).to(device)
 					for j in range(10):
