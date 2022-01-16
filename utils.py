@@ -123,7 +123,7 @@ def generate_based_on_clipscore(
 					clipscore = 2.5*np.clip( torch.cosine_similarity(clip_text, clip_image).cpu().numpy()[0], 0, None)
 					Z[ :, aux_next_token] = clipscore
 					#print(beta*Z[ :, aux_next_token] + gamma*logits[ :, aux_next_token])
-					#print(aux_text, 'CLIPScore: ', clipscore)
+					print(aux_text, 'CLIPScore: ', clipscore)
 				#print('----------------')
 				logits = beta*logits + gamma*Z
 			next_token = torch.argmax(logits, -1).unsqueeze(0)
