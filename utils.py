@@ -138,8 +138,12 @@ def generate_based_on_clipscore(
 
 		output_list = list(tokens.squeeze().cpu().numpy())
 		output_text = tokenizer.decode(output_list)
-
-	return output_text
+		# compute clipscore
+		tokens_clip = clip.tokenize([output_text]).to(device).long()
+		clip_text = clip_model.encode_text(tokens_clip).detach()
+		clipscore_text = 2.5*np.clip( torch.cosine_similarity(clip_text, clip_image).cpu().numpy()[0], 0, None)
+		
+	return output_text, clipscore_text
 
 def generate2(
 		model,
