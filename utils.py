@@ -120,16 +120,8 @@ def generate_based_on_clipscore(
 				outputs = model.gpt(inputs_embeds=generated)
 				logits = outputs.logits
 				logits = logits[:, -1, :] / (temperature if temperature > 0 else 1.0)
+				logits = logits.softmax(-1)
 				sorted_logits, sorted_indices = torch.sort(logits, descending=True)
-				cumulative_probs = torch.cumsum(nnf.softmax(sorted_logits, dim=-1), dim=-1)
-				sorted_indices_to_remove = cumulative_probs > top_p
-				sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[
-													..., :-1
-													].clone()
-				sorted_indices_to_remove[..., 0] = 0
-
-				indices_to_remove = sorted_indices[sorted_indices_to_remove]
-				logits[:, indices_to_remove] = filter_value
 				if tokens is not None:
 					Z = torch.zeros(*logits.shape).to(device)
 					for j in range(10):
@@ -146,7 +138,7 @@ def generate_based_on_clipscore(
 						#print(Z[ :, aux_next_token] + logits[ :, aux_next_token])
 						print(aux_text, 'CLIPScore: ', clipscore)
 					print('----------------')
-					logits = logits - Z
+					logits = logits + Z
 				next_token = torch.argmax(logits, -1).unsqueeze(0)
 				next_token_embed = model.gpt.transformer.wte(next_token)
 				if tokens is None:
