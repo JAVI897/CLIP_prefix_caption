@@ -119,7 +119,7 @@ def generate_based_on_clipscore(
 				logits = outputs.logits
 				logits = logits[:, -1, :] / (temperature if temperature > 0 else 1.0)
 				sorted_logits, sorted_indices = torch.sort(logits, descending=True)
-				print('[INFO] Sorted indices shape: ', sorted_indices.shape)
+				print('[INFO] Sorted indices first: ', sorted_indices[0])
 				cumulative_probs = torch.cumsum(nnf.softmax(sorted_logits, dim=-1), dim=-1)
 				sorted_indices_to_remove = cumulative_probs > top_p
 				sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[
