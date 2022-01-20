@@ -124,7 +124,7 @@ def generate_based_on_clipscore(
 					Z[ :, aux_next_token] = clipscore
 					#debug
 					sum_probs = gamma*Z[ :, aux_next_token] + beta*logits[ :, aux_next_token]
-					print(aux_text, ' ---> beta*logits + gamma*Z: ', sum_probs.detach())
+					print(aux_text, ' ---> beta*logits + gamma*Z: ', sum_probs[0][0][0])
 					#print(aux_text, 'CLIPScore: ', clipscore)
 				print('----------------')
 				logits = beta*logits + gamma*Z
