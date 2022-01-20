@@ -101,7 +101,7 @@ def main():
 													   gamma = config['gamma'], beta =config['beta'], embed=prefix_embed) # change greedy approach
 			print("PREDICT CAPTION: {} CLIPScore {}".format(text_caption, clipscore_text))
 			to_remove_c += 1
-			if to_remove_c == 10:
+			if to_remove_c == 2:
 				break
 			caption_img.append(text_caption)
 			captions.append(caption_img)
