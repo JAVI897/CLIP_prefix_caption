@@ -122,7 +122,9 @@ def generate_based_on_clipscore(
 					clip_text = clip_model.encode_text(tokens_clip).detach()
 					clipscore = 2.5*np.clip( torch.cosine_similarity(clip_text, clip_image).cpu().numpy()[0], 0, None)
 					Z[ :, aux_next_token] = clipscore
-					print('beta*logits + gamma*Z: ', gamma*Z[ :, aux_next_token] + beta*logits[ :, aux_next_token])
+					#debug
+					sum_probs = gamma*Z[ :, aux_next_token] + beta*logits[ :, aux_next_token]
+					print('beta*logits + gamma*Z: ', sum_probs.unsqueeze(0))
 					#print(aux_text, 'CLIPScore: ', clipscore)
 				print('----------------')
 				logits = beta*logits + gamma*Z
