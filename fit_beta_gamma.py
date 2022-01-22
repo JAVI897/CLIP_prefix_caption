@@ -106,10 +106,9 @@ def main(beta, gamma):
 	return CLIP_SCORE, REFCLIP_SCORE
 if __name__ == '__main__':
 	final_df = []
-	for beta in [0.5]: #np.arange(0, 1.02, 0.05):
-		for gamma in [10]:
+	for beta in np.arange(0, 1.05, 0.05):
+		for gamma in [5, 10, 15, 20]:
 			CLIP_SCORE, REFCLIP_SCORE = main(beta, gamma)
 			final_df.append([beta, gamma, CLIP_SCORE, REFCLIP_SCORE])
-		break
 	metrics_df = pd.DataFrame(final_df, columns = ['beta', 'gamma', 'clipscore', 'refclipscore'])
 	metrics_df.to_csv('fit_beta_gamma/summary_results.csv')
