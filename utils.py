@@ -121,6 +121,7 @@ def generate_based_on_clipscore(
 					tokens_clip = clip.tokenize([aux_text]).to(device).long()
 					clip_text = clip_model.encode_text(tokens_clip).detach()
 					clipscore = np.clip( torch.cosine_similarity(clip_text, clip_image).cpu().numpy()[0], 0, None)
+					print(clipscore)
 					Z[ :, aux_next_token] = clipscore
 					#debug
 					#sum_probs = gamma*Z[ :, aux_next_token] + beta*logits[ :, aux_next_token]
