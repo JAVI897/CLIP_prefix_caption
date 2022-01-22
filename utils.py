@@ -87,7 +87,7 @@ def generate_based_on_clipscore(
 		tokenizer,
 		clip_image, 
 		clip_model,
-		gamma = 0.9,
+		gamma = 10,
 		beta = 0.3,
 		tokens=None,
 		prompt=None,
@@ -111,7 +111,7 @@ def generate_based_on_clipscore(
 			sorted_logits, sorted_indices = torch.sort(logits, descending=True)
 			if tokens is not None:
 				Z = torch.zeros(*logits.shape).to(device)
-				for j in range(10):
+				for j in range(gamma):
 					aux_next_token = sorted_indices[:,j].unsqueeze(0)
 					aux = torch.cat((tokens, aux_next_token), dim = 1)
 					aux_list = list(aux.squeeze().cpu().numpy())
@@ -120,14 +120,14 @@ def generate_based_on_clipscore(
 					# compute clipscore
 					tokens_clip = clip.tokenize([aux_text]).to(device).long()
 					clip_text = clip_model.encode_text(tokens_clip).detach()
-					clipscore = 2.5*np.clip( torch.cosine_similarity(clip_text, clip_image).cpu().numpy()[0], 0, None)
+					clipscore = np.clip( torch.cosine_similarity(clip_text, clip_image).cpu().numpy()[0], 0, None)
 					Z[ :, aux_next_token] = clipscore
 					#debug
-					sum_probs = gamma*Z[ :, aux_next_token] + beta*logits[ :, aux_next_token]
-					print(aux_text, ' ---> beta*logits + gamma*Z: ', sum_probs[0][0][0].item())
+					#sum_probs = gamma*Z[ :, aux_next_token] + beta*logits[ :, aux_next_token]
+					#print(aux_text, ' ---> beta*logits + gamma*Z: ', sum_probs[0][0][0].item())
 					#print(aux_text, 'CLIPScore: ', clipscore)
-				print('----------------')
-				logits = beta*logits + gamma*Z
+				#print('----------------')
+				logits = beta*logits + (1 - beta)*Z
 			next_token = torch.argmax(logits, -1).unsqueeze(0)
 			next_token_embed = model.gpt.transformer.wte(next_token)
 			if tokens is None:

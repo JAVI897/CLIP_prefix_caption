@@ -12,25 +12,17 @@ import skimage.io as io
 import PIL.Image
 import json
 
-parser = argparse.ArgumentParser()
+def main(gamma, beta):
 
-parser.add_argument("--gamma", type=float, default=10)
-parser.add_argument("--beta", type=float, default=0.3)
-con = parser.parse_args()
-
-def configuration():
-	output_predictions = 'modified_greedy_approach_karpathy_test_predictions_gamma_{}_beta_{}.csv'.format(con.gamma, con.beta)
-	output_scores = 'scores_modified_greedy_approach_karpathy_test_predictions_gamma_{}_beta_{}.csv'.format(con.gamma, con.beta)
+	output_predictions = 'fit_beta_gamma/modified_greedy_approach_karpathy_test_predictions_gamma_{}_beta_{}.csv'.format(gamma, beta)
+	output_scores = 'fit_beta_gamma/scores_modified_greedy_approach_karpathy_test_metrics_gamma_{}_beta_{}.csv'.format(gamma, beta)
 	config ={
-			 'gamma': con.gamma,
-			 'beta': con.beta,
+			 'gamma': gamma,
+			 'beta': beta,
 			 'output_predictions': output_predictions,
 			 'output_scores' : output_scores 
 			 }
-	return config
 
-def main():
-	config = configuration()
 	N = type(None)
 	V = np.array
 	ARRAY = np.ndarray
@@ -71,23 +63,21 @@ def main():
 	model = model.eval() 
 	device = CUDA(0) if is_gpu else "cpu"
 	model = model.to(device)
-	#Get ground truth captions validation
-	with open('data/coco/karpathy_validation_captions.json') as json_file:
-		captions_valid_test = json.load(json_file)
+	#Get ground truth captions train
+	with open('data/coco/fit_beta_gamma_train_captions.json') as json_file:
+		captions_train_test = json.load(json_file)
 
 	# generate predictions if they do not exist
 	if not os.path.isfile(config['output_predictions']):
 		captions = []
 		predictions = []
-		file = open('data/coco/karpathy_valid_images.txt','r')
-
-		to_remove_c = 0
+		file = open('data/coco/fit_beta_gamma_train_images.txt','r')
 
 		for test_img in file.readlines():
 			file_path, number_instance = test_img.split()
 			_, name_img = file_path.split('/')
 			name_img = 'data/coco/val2014/'+ name_img
-			caption_img = captions_valid_test[number_instance][:5]
+			caption_img = captions_train_test[number_instance][:5]
 
 			image = io.imread(name_img)
 			pil_image = PIL.Image.fromarray(image)
@@ -100,15 +90,26 @@ def main():
 			text_caption, clipscore_text = generate_based_on_clipscore(model, tokenizer, prefix, clip_model,
 													   gamma = config['gamma'], beta =config['beta'], embed=prefix_embed) # change greedy approach
 			print("PREDICT CAPTION: {} CLIPScore {}".format(text_caption, clipscore_text))
-			to_remove_c += 1
-			if to_remove_c == 2:
-				break
 			caption_img.append(text_caption)
 			captions.append(caption_img)
 
-		#df = pd.DataFrame(captions, columns = ['caption 1', 'caption 2', 'caption 3', 'caption 4', 'caption 5', 'prediction'])
-		#print('\nWriting predictions to file "{}".'.format(config['output_predictions']))
-		#df.to_csv(config['output_predictions'])
+		df = pd.DataFrame(captions, columns = ['caption 1', 'caption 2', 'caption 3', 'caption 4', 'caption 5', 'prediction'])
+		print('\nWriting predictions to file "{}".'.format(config['output_predictions']))
+		df.to_csv(config['output_predictions'])
 
+	df_results = pd.read_csv(config['output_predictions'])
+	CLIP_SCORE, REFCLIP_SCORE = clipscore_karpathy_directories('data/coco/fit_beta_gamma_train_images.txt', df_results, device, clip_model, preprocess)
+	print('[INFO] Beta = {} Gamma = {} ---> Clipscore = {} RefCLIPScore = {}'.format(config['beta'], config['gamma'], CLIP_SCORE, REFCLIP_SCORE))
+	df_scores = pd.DataFrame({'CLIPScore' : [CLIP_SCORE],
+							  'REFCLIP_SCORE' : [REFCLIP_SCORE] })
+	df_scores.to_csv(config['output_scores'])
+	return CLIP_SCORE, REFCLIP_SCORE
 if __name__ == '__main__':
-	main()
+	final_df = []
+	for beta in np.arange(0, 1.02, 0.02):
+		for gamma in [10]:
+			CLIP_SCORE, REFCLIP_SCORE = main(beta, gamma)
+			final_df.append([beta, gamma, CLIP_SCORE, REFCLIP_SCORE])
+		break
+	metrics_df = pd.DataFrame(final_df, columns = ['beta', 'gamma', 'clipscore', 'refclipscore'])
+	metrics_df.to_csv('fit_beta_gamma/summary_results.csv')
