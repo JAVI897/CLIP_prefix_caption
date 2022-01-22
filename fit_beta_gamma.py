@@ -12,7 +12,7 @@ import skimage.io as io
 import PIL.Image
 import json
 
-def main(gamma, beta):
+def main(beta, gamma):
 
 	output_predictions = 'fit_beta_gamma/modified_greedy_approach_karpathy_test_predictions_gamma_{}_beta_{}.csv'.format(gamma, beta)
 	output_scores = 'fit_beta_gamma/scores_modified_greedy_approach_karpathy_test_metrics_gamma_{}_beta_{}.csv'.format(gamma, beta)
