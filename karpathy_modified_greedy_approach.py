@@ -97,9 +97,9 @@ def main():
 				#prefix = prefix / prefix.norm(2, -1).item()
 				prefix_embed = model.clip_project(prefix)
 
-			text_caption, clipscore_text = generate_based_on_clipscore(model, tokenizer, prefix, clip_model,
+			text_caption = generate_based_on_clipscore(model, tokenizer, prefix, clip_model,
 													   gamma = config['gamma'], beta =config['beta'], embed=prefix_embed) # change greedy approach
-			print("PREDICT CAPTION: {} CLIPScore {}".format(text_caption, clipscore_text))
+			#print("PREDICT CAPTION: {} CLIPScore {}".format(text_caption, clipscore_text))
 			to_remove_c += 1
 			if to_remove_c == 2:
 				break
