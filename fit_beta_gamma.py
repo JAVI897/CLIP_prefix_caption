@@ -76,7 +76,7 @@ def main(gamma, beta):
 		for test_img in file.readlines():
 			file_path, number_instance = test_img.split()
 			_, name_img = file_path.split('/')
-			name_img = 'data/coco/val2014/'+ name_img
+			name_img = 'data/coco/train2014/'+ name_img
 			caption_img = captions_train_test[number_instance][:5]
 
 			image = io.imread(name_img)
