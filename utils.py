@@ -209,7 +209,7 @@ def generate2(
 
 	return generated_list[0]
 
-def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, preprocess):
+def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, preprocess, partition = 'val'):
 	'''
 	Code for CLIPScore (https://arxiv.org/abs/2104.08718)
 	@inproceedings{hessel2021clipscore,
@@ -226,7 +226,10 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, p
 	for ind_image, test_img in enumerate(file.readlines()):
 		file_path, number_instance = test_img.split()
 		_, name_img = file_path.split('/')
-		name_img = 'data/coco/val2014/'+ name_img
+		if partition == 'val':
+			name_img = 'data/coco/val2014/'+ name_img
+		else:
+			name_img = 'data/coco/train2014/'+ name_img
 		image = io.imread(name_img)
 		pil_image = PIL.Image.fromarray(image)
 		image = preprocess(pil_image).unsqueeze(0).to(device)
