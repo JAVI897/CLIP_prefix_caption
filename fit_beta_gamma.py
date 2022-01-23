@@ -107,7 +107,7 @@ def main(beta, gamma):
 if __name__ == '__main__':
 	final_df = []
 	for beta in np.arange(0, 1.05, 0.05):
-		for gamma in [5, 10, 15, 20]:
+		for gamma in [5, 10, 15, 20, 25, 30]:
 			CLIP_SCORE, REFCLIP_SCORE = main(beta, gamma)
 			final_df.append([beta, gamma, CLIP_SCORE, REFCLIP_SCORE])
 	metrics_df = pd.DataFrame(final_df, columns = ['beta', 'gamma', 'clipscore', 'refclipscore'])
