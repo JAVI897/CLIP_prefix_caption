@@ -101,9 +101,9 @@ def main():
 			caption_img.append(text_caption)
 			captions.append(caption_img)
 
-		#df = pd.DataFrame(captions, columns = ['caption 1', 'caption 2', 'caption 3', 'caption 4', 'caption 5', 'prediction'])
-		#print('\nWriting predictions to file "{}".'.format(config['output_predictions']))
-		#df.to_csv(config['output_predictions'])
+		df = pd.DataFrame(captions, columns = ['caption 1', 'caption 2', 'caption 3', 'caption 4', 'caption 5', 'prediction'])
+		print('\nWriting predictions to file "{}".'.format(config['output_predictions']))
+		df.to_csv(config['output_predictions'])
 
 if __name__ == '__main__':
 	main()
