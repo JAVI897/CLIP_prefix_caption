@@ -81,8 +81,6 @@ def main():
 		predictions = []
 		file = open('data/coco/karpathy_valid_images.txt','r')
 
-		to_remove_c = 0
-
 		for test_img in file.readlines():
 			file_path, number_instance = test_img.split()
 			_, name_img = file_path.split('/')
@@ -100,9 +98,6 @@ def main():
 			text_caption = generate_based_on_clipscore(model, tokenizer, prefix, clip_model,
 													   gamma = config['gamma'], beta =config['beta'], embed=prefix_embed) # change greedy approach
 			#print("PREDICT CAPTION: {} CLIPScore {}".format(text_caption, clipscore_text))
-			to_remove_c += 1
-			if to_remove_c == 2:
-				break
 			caption_img.append(text_caption)
 			captions.append(caption_img)
 
