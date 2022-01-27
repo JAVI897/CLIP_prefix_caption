@@ -14,7 +14,7 @@ import json
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--gamma", type=float, default=10)
+parser.add_argument("--gamma", type=int, default=10)
 parser.add_argument("--beta", type=float, default=0.3)
 con = parser.parse_args()
 
