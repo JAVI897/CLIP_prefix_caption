@@ -118,7 +118,7 @@ def generate_based_on_clipscore(
 					aux_text = tokenizer.decode(aux_list)
 
 					# compute clipscore
-					tokens_clip = clip.tokenize([aux_text]).to(device).long()
+					tokens_clip = clip.tokenize([aux_text[:77]]).to(device).long()
 					clip_text = clip_model.encode_text(tokens_clip).detach()
 					clipscore = np.clip( torch.cosine_similarity(clip_text, clip_image).cpu().numpy()[0], 0, None)
 					Z[ :, aux_next_token] = clipscore
