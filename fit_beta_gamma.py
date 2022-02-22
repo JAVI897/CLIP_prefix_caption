@@ -16,11 +16,13 @@ def main(beta, gamma):
 
 	output_predictions = 'fit_beta_gamma/modified_greedy_approach_karpathy_test_predictions_gamma_{}_beta_{}.csv'.format(gamma, beta)
 	output_scores = 'fit_beta_gamma/scores_modified_greedy_approach_karpathy_test_metrics_gamma_{}_beta_{}.csv'.format(gamma, beta)
+	output_scores_all = 'fit_beta_gamma/all_scores_modified_greedy_approach_karpathy_test_metrics_gamma_{}_beta_{}.csv'.format(gamma, beta)
 	config ={
 			 'gamma': gamma,
 			 'beta': beta,
 			 'output_predictions': output_predictions,
-			 'output_scores' : output_scores 
+			 'output_scores' : output_scores,
+			 'output_scores_all': output_scores_all
 			 }
 
 	N = type(None)
@@ -98,11 +100,14 @@ def main(beta, gamma):
 		df.to_csv(config['output_predictions'])
 
 	df_results = pd.read_csv(config['output_predictions'])
-	CLIP_SCORE, REFCLIP_SCORE = clipscore_karpathy_directories('data/coco/fit_beta_gamma_train_images.txt', df_results, device, clip_model, preprocess, partition = 'train')
+	CLIP_SCORE, REFCLIP_SCORE, refclipscore_list, clipscore_list = clipscore_karpathy_directories('data/coco/fit_beta_gamma_train_images.txt', df_results, device, clip_model, preprocess, partition = 'train')
 	print('[INFO] Beta = {} Gamma = {} ---> Clipscore = {} RefCLIPScore = {}'.format(config['beta'], config['gamma'], CLIP_SCORE, REFCLIP_SCORE))
 	df_scores = pd.DataFrame({'CLIPScore' : [CLIP_SCORE],
 							  'REFCLIP_SCORE' : [REFCLIP_SCORE] })
 	df_scores.to_csv(config['output_scores'])
+	df_scores_all = pd.DataFrame({'CLIPScore' : [clipscore_list],
+							      'REFCLIP_SCORE' : [refclipscore_list] })
+	df_scores_all.to_csv(config['output_scores_all'])
 	return CLIP_SCORE, REFCLIP_SCORE
 if __name__ == '__main__':
 	final_df = []

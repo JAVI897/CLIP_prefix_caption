@@ -222,6 +222,8 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, p
 	N = 0
 	CLIP_SCORE = 0
 	REFCLIP_SCORE = 0
+	refclipscore_list = []
+	clipscore_list = []
 	file = open(dir_images,'r')
 	for ind_image, test_img in enumerate(file.readlines()):
 		file_path, number_instance = test_img.split()
@@ -253,6 +255,9 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, p
 			clip_score_references.append(ref_score)
 		max_clip_score_references = max(clip_score_references)
 		refclip_score = stats.harmonic_mean([clip_score, max_clip_score_references])
+		
+		refclipscore_list.append(refclip_score)
+		clipscore_list.append(clip_score)
 
 		N += 1
 		CLIP_SCORE += clip_score
@@ -260,7 +265,7 @@ def clipscore_karpathy_directories(dir_images, df_results, device, clip_model, p
 
 	CLIP_SCORE = CLIP_SCORE / N
 	REFCLIP_SCORE = REFCLIP_SCORE / N
-	return CLIP_SCORE, REFCLIP_SCORE
+	return CLIP_SCORE, REFCLIP_SCORE, refclipscore_list, clipscore_list
 
 def compute_metrics(df_results):
 	N = 0
