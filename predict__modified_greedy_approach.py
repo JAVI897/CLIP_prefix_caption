@@ -25,7 +25,7 @@ con = parser.parse_args()
 def configuration():
 	config ={
 			 'gamma': con.gamma,
-			 'beta':  con.beta
+			 'beta':  con.beta,
 			 'url':   con.url
 			 }
 	return config
