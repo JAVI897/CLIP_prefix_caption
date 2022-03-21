@@ -105,6 +105,11 @@ def main():
 	model = model.eval() 
 	device = CUDA(0) if is_gpu else "cpu"
 	model = model.to(device)
+	config['model'] = model
+	config['tokenizer'] = tokenizer
+	config['clip_model'] = clip_model
+	config['device'] = device 
+	config['prefix_length'] = prefix_length
 
 	# load image from url
 
